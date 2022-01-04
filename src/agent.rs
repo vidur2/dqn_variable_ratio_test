@@ -47,8 +47,8 @@ impl Agent {
         let mut rng = rand::thread_rng();
         let action: usize;
         let does_explore: f64 = rng.gen_range(f64::MIN..1.0);
-        let max_q_value = self.main_network.generate_q_value(current_state.clone()).1; 
-        let all_q_values = self.main_network.generate_q_value(current_state.clone()).0;
+        let max_q_value = self.main_network.generate_q_value(current_state).1; 
+        let all_q_values = self.main_network.generate_q_value(current_state).0;
         self.main_network.iterations_passed += 1;
         let epsilon: f64;
         if max_q_value != 0.0 {

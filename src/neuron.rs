@@ -11,7 +11,6 @@ pub enum ActivationFunction {
 
 pub struct Neuron {
     pub output: f64,
-    inputs: Vec<f64>,
     bias: f64,
     weights: Vec<f64>,
     activation_function: ActivationFunction,
@@ -34,7 +33,6 @@ impl Neuron {
         }
         Self {
             output: 0f64,
-            inputs: Vec::new(),
             bias: layer_number - 1f64,
             weights: weights,
             activation_function: activation_function,
@@ -44,8 +42,7 @@ impl Neuron {
     pub fn get_weights(self) -> Vec<f64>{
         return self.weights
     }
-    pub fn predict(&mut self, inputs: &Vec<f64>) -> f64 {
-        self.inputs = inputs.clone();
+    pub fn predict(&self, inputs: &Vec<f64>) -> f64 {
         let mut counter = 0;
         let mut input: f64;
         let mut weighted_sum = self.bias;
@@ -56,12 +53,11 @@ impl Neuron {
         }
         self.activate(weighted_sum)
     }
-    pub fn adjust(&mut self, actual_q_value: f64, predicted_value: f64) {
+    pub fn adjust(&mut self, actual_q_value: f64, predicted_value: f64, reward: f64, inputs: &Vec<f64>, next_state: &Vec<f64>) {
         let delta = (actual_q_value - predicted_value).powf(2.0);
         for i in 0..self.weights.len() {
-            self.weights[i] += delta * self.inputs[i]
+            self.weights[i] += delta * (next_state[i]- inputs[i]).powf(2.0) * reward
         }
-        self.inputs = Vec::new();
     }
     fn activate(&self, weighted_sum: f64) -> f64{
         match self.activation_function {

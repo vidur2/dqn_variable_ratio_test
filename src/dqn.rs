@@ -53,7 +53,7 @@ impl Network {
         }
     }
 
-    pub fn generate_q_value(&mut self, input_state: Vec<f64>) -> (Vec<f64>, f64){
+    pub fn generate_q_value(&mut self, input_state: &Vec<f64>) -> (Vec<f64>, f64){
         let mut outputs: Vec<f64> = Vec::new();
         let mut counter = 0;
         let mut q_vec: Vec<f64> = Vec::new();
@@ -83,8 +83,8 @@ impl Network {
         return (q_vec, max_q_value)
     }
 
-    pub fn backpropagate(&mut self, inputs: Vec<f64>, actual_q_value: f64) {
-        let predicted_q_value = self.generate_q_value(inputs);
+    pub fn backpropagate(&mut self, inputs: Vec<f64>, actual_q_value: f64, reward: f64, next_state: Vec<f64>) {
+        let predicted_q_value = self.generate_q_value(&inputs);
         let output_index = predicted_q_value.0.iter().position(|&r| r == predicted_q_value.1).expect("Invalid max_q_value");
         let layer_amt = self.neurons.keys().len();
         let mut counter = 1;
@@ -93,7 +93,7 @@ impl Network {
             current_index = 0;
             for neuron in layer {
                 if counter != layer_amt || current_index == output_index {
-                    neuron.adjust(actual_q_value, predicted_q_value.1)
+                    neuron.adjust(actual_q_value, predicted_q_value.1, reward, &inputs, &next_state)
                 }
                 current_index += 1;
             }
