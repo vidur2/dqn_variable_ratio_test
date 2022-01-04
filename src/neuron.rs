@@ -1,7 +1,7 @@
 use rand::Rng;
 use std::f64::consts::E;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum ActivationFunction {
     HyperTan,
     Sigmoidal,
@@ -10,11 +10,11 @@ pub enum ActivationFunction {
     Relu
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Neuron {
     pub output: f64,
     bias: f64,
-    weights: Vec<f64>,
+    pub weights: Vec<f64>,
     activation_function: ActivationFunction,
     layer_number: u64
 }
@@ -25,12 +25,12 @@ impl Neuron {
         let mut rng = rand::thread_rng();
 
         if use_rand {
-            for _ in 0..input_number {
-                weights.push(rng.gen_range(-10.0..10.0) as f64)
+            for _ in 0..input_number - 1 {
+                weights.push(rng.gen_range(-10.0..10.0) as f64);
             }
         } else {
-            for _ in 0..input_number {
-                weights.push(0.0)
+            for _ in 0..input_number - 1 {
+                weights.push(0.0);
             }
         }
         Self {

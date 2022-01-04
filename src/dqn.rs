@@ -1,6 +1,24 @@
 use crate::neuron::{ Neuron, ActivationFunction };
 use std::collections::HashMap;
 
+#[cfg(test)]
+mod tests {
+    use crate::dqn::Network;
+    use crate::neuron;
+    #[test]
+    fn check_forward_propagate(){
+        let mut network: Network = Network::generate_network(vec![2, 3, 1], 2);
+        let q_value = network.generate_q_value(&vec![1.0, 5.0]);
+        println!("{}", q_value.1);
+    }
+
+    #[test]
+    fn check_back_propagate(){
+        let mut network = Network::generate_network(vec![2, 3, 1], 2);
+        network.backpropagate(&vec![2.0, 3.0], 5f64, 10f64, &vec![5.0, 2.0]);
+    }
+}
+
 pub struct Network {
     pub neurons: HashMap<String, Vec<Neuron>>,
     pub iterations_passed: u64
@@ -38,9 +56,9 @@ impl Network {
                 }
 
                 if counter + 1 != structure.len() {
-                    neuron = Neuron::initialize(*layer as f64, ActivationFunction::Relu, inputs, true);
+                    neuron = Neuron::initialize((counter + 1usize) as f64, ActivationFunction::Relu, inputs, true);
                 } else {
-                    neuron = Neuron::initialize(*layer as f64, ActivationFunction::Relu, inputs, false);
+                    neuron = Neuron::initialize((counter + 1) as f64, ActivationFunction::Relu, inputs, false);
                 }
                 neuron_vec.push(neuron)
             }
@@ -70,10 +88,9 @@ impl Network {
                 } else{
                     outputs.push(neuron.predict(&prev_outputs))
                 }
-                if counter == ref_map.keys().len() {
+                if counter == ref_map.keys().len() - 1 {
                     let current_prediction = neuron.predict(&prev_outputs);
                     q_vec.push(current_prediction.clone());
-
                     if current_prediction > max_q_value {
                         max_q_value = current_prediction;
                     }
@@ -89,12 +106,12 @@ impl Network {
         let output_index = predicted_q_value.0.iter().position(|&r| r == predicted_q_value.1).expect("Invalid max_q_value");
         let layer_amt = self.neurons.keys().len();
         let mut counter = 1;
-        let mut current_index = 0;
+        let mut current_index = 1;
         for layer in self.neurons.values_mut(){
             current_index = 0;
             for neuron in layer {
                 if counter != layer_amt || current_index == output_index {
-                    neuron.adjust(actual_q_value, predicted_q_value.1, reward, &inputs, &next_state)
+                    neuron.adjust(actual_q_value, predicted_q_value.1, reward, &inputs, &next_state);
                 }
                 current_index += 1;
             }
