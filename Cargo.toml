@@ -5,6 +5,7 @@ edition = "2021"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/vidur2/dqn_variable_ratio_test"
 readme = "README.md"
+description = "Provides a generator for a deep q-learning network. Allows for random training intervals, and will be updated to a more stable version later."
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
