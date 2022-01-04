@@ -1,6 +1,7 @@
 use rand::Rng;
 use std::f64::consts::E;
 
+#[derive(Clone)]
 pub enum ActivationFunction {
     HyperTan,
     Sigmoidal,
@@ -9,6 +10,7 @@ pub enum ActivationFunction {
     Relu
 }
 
+#[derive(Clone)]
 pub struct Neuron {
     pub output: f64,
     bias: f64,

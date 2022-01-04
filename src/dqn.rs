@@ -2,7 +2,7 @@ use crate::neuron::{ Neuron, ActivationFunction };
 use std::collections::HashMap;
 
 pub struct Network {
-    neurons: HashMap<String, Vec<Neuron>>,
+    pub neurons: HashMap<String, Vec<Neuron>>,
     pub iterations_passed: u64
 }
 
@@ -11,7 +11,8 @@ impl Clone for Network {
         let keys_copy = self.neurons.keys();
         let mut cloned_hashmap = HashMap::new();
         for key in keys_copy {
-            cloned_hashmap.insert(key.clone(), Vec::new());
+            let layer = self.neurons.get(key).unwrap();
+            cloned_hashmap.insert(key.clone(), layer.clone());
         }
         Network {
             neurons: cloned_hashmap,
@@ -36,7 +37,7 @@ impl Network {
                     inputs = structure[counter - 1]
                 }
 
-                if (counter + 1 != structure.len()) {
+                if counter + 1 != structure.len() {
                     neuron = Neuron::initialize(*layer as f64, ActivationFunction::Relu, inputs, true);
                 } else {
                     neuron = Neuron::initialize(*layer as f64, ActivationFunction::Relu, inputs, false);
@@ -83,7 +84,7 @@ impl Network {
         return (q_vec, max_q_value)
     }
 
-    pub fn backpropagate(&mut self, inputs: Vec<f64>, actual_q_value: f64, reward: f64, next_state: Vec<f64>) {
+    pub fn backpropagate(&mut self, inputs: &Vec<f64>, actual_q_value: f64, reward: f64, next_state: &Vec<f64>) {
         let predicted_q_value = self.generate_q_value(&inputs);
         let output_index = predicted_q_value.0.iter().position(|&r| r == predicted_q_value.1).expect("Invalid max_q_value");
         let layer_amt = self.neurons.keys().len();
