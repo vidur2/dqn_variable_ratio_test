@@ -1,5 +1,5 @@
 [package]
-name = "dqn_variable_ratio_test"
+name = "deep_q_network_bindings"
 version = "0.1.0"
 edition = "2021"
 license = "MIT OR Apache-2.0"
