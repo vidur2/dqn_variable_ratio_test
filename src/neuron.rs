@@ -15,8 +15,7 @@ pub struct Neuron {
     pub output: f64,
     bias: f64,
     pub weights: Vec<f64>,
-    activation_function: ActivationFunction,
-    layer_number: u64
+    activation_function: ActivationFunction
 }
 
 impl Neuron {
@@ -26,7 +25,7 @@ impl Neuron {
 
         if use_rand {
             for _ in 0..input_number - 1 {
-                weights.push(rng.gen_range(-10.0..10.0) as f64);
+                weights.push(rng.gen_range(-10.0, 10.0) as f64);
             }
         } else {
             for _ in 0..input_number - 1 {
@@ -37,12 +36,8 @@ impl Neuron {
             output: 0f64,
             bias: layer_number - 1f64,
             weights: weights,
-            activation_function: activation_function,
-            layer_number: layer_number as u64
+            activation_function: activation_function
         }
-    }
-    pub fn get_weights(self) -> Vec<f64>{
-        return self.weights
     }
     pub fn predict(&self, inputs: &Vec<f64>) -> f64 {
         let mut counter = 0;

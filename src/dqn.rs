@@ -1,23 +1,22 @@
 use crate::neuron::{ Neuron, ActivationFunction };
 use std::collections::HashMap;
 
-#[cfg(test)]
-mod tests {
-    use crate::dqn::Network;
-    use crate::neuron;
-    #[test]
-    fn check_forward_propagate(){
-        let mut network: Network = Network::generate_network(vec![2, 3, 1], 2);
-        let q_value = network.generate_q_value(&vec![1.0, 5.0]);
-        println!("{}", q_value.1);
-    }
+// #[cfg(test)]
+// mod tests {
+//     use crate::dqn::Network;
+//     #[test]
+//     fn check_forward_propagate(){
+//         let mut network: Network = Network::generate_network(vec![2, 3, 1], 2);
+//         let q_value = network.generate_q_value(&vec![1.0, 5.0]);
+//         println!("{}", q_value.1);
+//     }
 
-    #[test]
-    fn check_back_propagate(){
-        let mut network = Network::generate_network(vec![2, 3, 1], 2);
-        network.backpropagate(&vec![2.0, 3.0], 5f64, 10f64, &vec![5.0, 2.0]);
-    }
-}
+//     #[test]
+//     fn check_back_propagate(){
+//         let mut network = Network::generate_network(vec![2, 3, 1], 2);
+//         network.backpropagate(&vec![2.0, 3.0], 5f64, 10f64, &vec![5.0, 2.0]);
+//     }
+// }
 
 pub struct Network {
     pub neurons: HashMap<String, Vec<Neuron>>,
@@ -101,16 +100,15 @@ impl Network {
         return (q_vec, max_q_value)
     }
 
-    pub fn backpropagate(&mut self, inputs: &Vec<f64>, actual_q_value: f64, reward: f64, next_state: &Vec<f64>) {
+    pub fn backpropagate(&mut self, inputs: &Vec<f64>, actual_q_value: f64, action: usize, reward: f64, next_state: &Vec<f64>) {
         let predicted_q_value = self.generate_q_value(&inputs);
-        let output_index = predicted_q_value.0.iter().position(|&r| r == predicted_q_value.1).expect("Invalid max_q_value");
         let layer_amt = self.neurons.keys().len();
         let mut counter = 1;
         let mut current_index = 1;
         for layer in self.neurons.values_mut(){
             current_index = 0;
             for neuron in layer {
-                if counter != layer_amt || current_index == output_index {
+                if counter != layer_amt || current_index == action {
                     neuron.adjust(actual_q_value, predicted_q_value.1, reward, &inputs, &next_state);
                 }
                 current_index += 1;

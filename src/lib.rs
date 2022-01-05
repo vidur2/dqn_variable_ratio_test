@@ -1,6 +1,7 @@
 mod neuron;
 mod agent;
 mod dqn;
+//mod equation;
 
 use agent::{ Agent };
 use wasm_bindgen::prelude::*;
@@ -14,9 +15,9 @@ pub struct StateStorage {
 
 #[wasm_bindgen]
 impl StateStorage {
-    pub fn new(structure: Vec<u64>, amount_of_states: u64, reward_policy: String, copy_amount: u64, min_value: u8, max_value: u8) -> StateStorage{
+    pub fn new(structure: Vec<u64>, amount_of_states: u64, copy_amount: u64, min_value: u8, max_value: u8) -> StateStorage {
         StateStorage {
-            agent: Agent::initialize_agent(structure, amount_of_states, reward_policy, copy_amount, min_value..max_value)
+            agent: Agent::initialize_agent(structure, amount_of_states, copy_amount, min_value..max_value)
         }
     }
 
