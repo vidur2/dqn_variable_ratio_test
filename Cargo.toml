@@ -11,3 +11,4 @@ description = "Provides a generator for a deep q-learning network. Allows for ra
 
 [dependencies]
 rand = "0.8.4"
+wasm-bindgen = "0.2.78"

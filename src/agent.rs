@@ -8,8 +8,8 @@ pub struct Agent {
     replay_buffer: Vec<BufferItem>,
     unexplored_actions: Vec<u64>,
     reward_policy: String,
-    variable_lr: usize,
-    variable_range: Range<usize>,
+    variable_lr: u8,
+    variable_range: Range<u8>,
     copy_amount: u64
 }
 
@@ -21,7 +21,7 @@ struct BufferItem {
 }
 
 impl Agent {
-    pub fn initialize_agent(structure: Vec<u64>, amount_of_states: u64, reward_policy: String, copy_amount: u64, range: Range<usize>) -> Self {
+    pub fn initialize_agent(structure: Vec<u64>, amount_of_states: u64, reward_policy: String, copy_amount: u64, range: Range<u8>) -> Self {
         let mut rng = rand::thread_rng();
         let main_network = Network::generate_network(structure.clone(), amount_of_states);
         let target_network = main_network.clone();
@@ -51,7 +51,7 @@ impl Agent {
             reward: reward
         };
         self.replay_buffer.push(item);
-        if self.replay_buffer.len() == self.variable_lr {
+        if self.replay_buffer.len() == self.variable_lr as usize {
             for item in self.replay_buffer.iter() {
                 let actual_q_value = self.target_network.generate_q_value(&item.current_state);
                 self.main_network.backpropagate(&item.current_state, actual_q_value.1, item.reward, &item.next_state)
