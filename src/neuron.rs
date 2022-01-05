@@ -51,7 +51,7 @@ impl Neuron {
         self.activate(weighted_sum)
     }
     pub fn adjust(&mut self, actual_q_value: f64, predicted_value: f64, reward: f64, inputs: &Vec<f64>, next_state: &Vec<f64>) {
-        let delta = (actual_q_value - predicted_value).powf(2.0);
+        let delta = -1.0 * (actual_q_value - predicted_value).powf(2.0);
         for i in 0..self.weights.len() {
             self.weights[i] += delta * (next_state[i]- inputs[i]).powf(2.0) * reward
         }
