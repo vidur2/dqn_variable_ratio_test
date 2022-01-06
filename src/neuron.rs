@@ -3,6 +3,7 @@ use std::f64::consts::E;
 use serde::Serialize;
 
 #[derive(Clone, Serialize)]
+#[repr(u8)]
 pub enum ActivationFunction {
     HyperTan,
     Sigmoidal,

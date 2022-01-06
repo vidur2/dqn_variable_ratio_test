@@ -1,7 +1,7 @@
 mod neuron;
 mod agent;
 mod dqn;
-// mod equation;
+mod convolution_layer;
 
 #[cfg(test)]
 mod tests {
