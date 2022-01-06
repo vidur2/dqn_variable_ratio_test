@@ -1,6 +1,7 @@
 use crate::neuron::{ Neuron, ActivationFunction };
 use std::collections::HashMap;
 use std::f64::consts::E;
+use serde::{Serialize};
 
 // #[cfg(test)]
 // mod tests {
@@ -22,6 +23,7 @@ use std::f64::consts::E;
     // }
 // }
 
+#[derive(Serialize)]
 pub struct Network {
     pub neurons: HashMap<String, Vec<Neuron>>,
     pub iterations_passed: u64

@@ -1,7 +1,9 @@
 use crate::dqn::Network;
 use rand::Rng;
 use std::ops::Range;
+use serde::{Serialize};
 
+#[derive(Serialize)]
 pub struct Agent {
     target_network: Network,
     main_network: Network,
@@ -9,9 +11,10 @@ pub struct Agent {
     unexplored_actions: Vec<u64>,
     variable_lr: u8,
     variable_range: Range<u8>,
-    copy_amount: u64
+    iteration_backprop: u64
 }
 
+#[derive(Serialize)]
 struct BufferItem {
     current_state: Vec<f64>,
     next_state: Vec<f64>,
@@ -20,7 +23,7 @@ struct BufferItem {
 }
 
 impl Agent {
-    pub fn initialize_agent(structure: Vec<u64>, amount_of_states: u64, copy_amount: u64, range: Range<u8>) -> Self {
+    pub fn initialize_agent(structure: Vec<u64>, amount_of_states: u64, iteration_backprop: u64, range: Range<u8>) -> Self {
         let mut rng = rand::thread_rng();
         let main_network = Network::generate_network(structure.clone(), amount_of_states);
         let target_network = main_network.clone();
@@ -36,7 +39,7 @@ impl Agent {
             unexplored_actions: unexplored_actions,
             variable_lr: rng.gen_range(range.clone().start, range.clone().end),
             variable_range: range,
-            copy_amount: copy_amount
+            iteration_backprop: iteration_backprop
         }
     }
 
@@ -55,7 +58,7 @@ impl Agent {
                 self.main_network.backpropagate(&item.current_state, actual_q_value.1, item.action, item.reward, &item.next_state)
             }
             self.main_network.iterations_passed += 1;
-            if self.main_network.iterations_passed == self.copy_amount {
+            if self.main_network.iterations_passed == self.iteration_backprop {
                 let mut rng = rand::thread_rng();
                 self.target_network.neurons = self.main_network.neurons.clone();
                 self.main_network.iterations_passed = 0;
@@ -73,7 +76,6 @@ impl Agent {
         self.main_network.iterations_passed += 1;
         let epsilon: f64;
         if max_q_value != 0.0 {
-            let sum: f64 = all_q_values.iter().sum();
             epsilon = 1.0 - (max_q_value)
         } else {
             epsilon = 0.0

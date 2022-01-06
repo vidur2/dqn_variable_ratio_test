@@ -1,7 +1,8 @@
 use rand::Rng;
 use std::f64::consts::E;
+use serde::Serialize;
 
-#[derive(Clone)]
+#[derive(Clone, Serialize)]
 pub enum ActivationFunction {
     HyperTan,
     Sigmoidal,
@@ -10,7 +11,7 @@ pub enum ActivationFunction {
     Relu
 }
 
-#[derive(Clone)]
+#[derive(Clone, Serialize)]
 pub struct Neuron {
     pub output: f64,
     bias: f64,
