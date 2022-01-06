@@ -31,6 +31,15 @@ impl ConvLayer {
         feature_map
     }
 
+    pub fn adjust(&mut self, actual_q_value: f64, predicted_value: f64, reward: f64) {
+        let delta = (actual_q_value - predicted_value).powf(2.0) * reward;
+        for i in 0..self.convolution_layer.len() {
+            for j in 0..self.convolution_layer[i].len() {
+                self.convolution_layer[i][j] += delta
+            }
+        }
+    }
+
     fn calculate_sum(&self, pos_y_start: usize, pos_y_end: usize, input_image: Vec<Vec<f64>>, feature_map: &mut Vec<Vec<f64>>) {
         let mut layer: Vec<f64> = Vec::new();
         let mut pos_x_start = 0;
