@@ -1,5 +1,6 @@
 use crate::neuron::{ Neuron, ActivationFunction };
 use std::collections::HashMap;
+use std::f64::consts::E;
 
 // #[cfg(test)]
 // mod tests {
@@ -8,14 +9,17 @@ use std::collections::HashMap;
 //     fn check_forward_propagate(){
 //         let mut network: Network = Network::generate_network(vec![2, 3, 1], 2);
 //         let q_value = network.generate_q_value(&vec![1.0, 5.0]);
-//         println!("{}", q_value.1);
+//         for value in q_value.0.iter() {
+//             println!("Output of softmax {}", value)
+//         }
+//         println!("Final output is {}", q_value.1)
 //     }
 
-//     #[test]
-//     fn check_back_propagate(){
-//         let mut network = Network::generate_network(vec![2, 3, 1], 2);
-//         network.backpropagate(&vec![2.0, 3.0], 5f64, 10f64, &vec![5.0, 2.0]);
-//     }
+    // #[test]
+    // fn check_back_propagate(){
+    //     let mut network = Network::generate_network(vec![2, 3, 1], 2);
+    //     network.backpropagate(&vec![2.0, 3.0], 5f64, 10f64, &vec![5.0, 2.0]);
+    // }
 // }
 
 pub struct Network {
@@ -57,7 +61,7 @@ impl Network {
                 if counter + 1 != structure.len() {
                     neuron = Neuron::initialize((counter + 1usize) as f64, ActivationFunction::Relu, inputs, true);
                 } else {
-                    neuron = Neuron::initialize((counter + 1) as f64, ActivationFunction::Relu, inputs, false);
+                    neuron = Neuron::initialize((counter + 1) as f64, ActivationFunction::Linear, inputs, false);
                 }
                 neuron_vec.push(neuron)
             }
@@ -97,7 +101,14 @@ impl Network {
             }
             counter += 1;
         }
-        return (q_vec, max_q_value)
+        let mut denominator = 0f64;
+        for value in q_vec.iter() {
+            denominator += E.powf(*value)
+        }
+        for i in 0..q_vec.len() {
+            q_vec[i] = E.powf(q_vec[i])/denominator
+        }
+        return (q_vec, E.powf(max_q_value)/denominator)
     }
 
     pub fn backpropagate(&mut self, inputs: &Vec<f64>, actual_q_value: f64, action: usize, reward: f64, next_state: &Vec<f64>) {

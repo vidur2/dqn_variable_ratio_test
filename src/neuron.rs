@@ -1,7 +1,7 @@
 use rand::Rng;
 use std::f64::consts::E;
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub enum ActivationFunction {
     HyperTan,
     Sigmoidal,
@@ -10,7 +10,7 @@ pub enum ActivationFunction {
     Relu
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct Neuron {
     pub output: f64,
     bias: f64,
@@ -75,10 +75,10 @@ impl Neuron {
                 weighted_sum
             },
             ActivationFunction::Relu => {
-                if 0.0 >= weighted_sum{
-                    0.0
+                if 0.0 > weighted_sum {
+                    return 0.0
                 } else {
-                    weighted_sum
+                    return weighted_sum
                 }
             }
         }

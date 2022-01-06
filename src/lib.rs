@@ -1,7 +1,7 @@
 mod neuron;
 mod agent;
 mod dqn;
-//mod equation;
+// mod equation;
 
 use agent::{ Agent };
 use wasm_bindgen::prelude::*;

@@ -1,16 +1,18 @@
 
 #[macro_export]
 macro_rules! equation {
-    ( $($expr:expr) *, $($value:literal), * ) => {
-        let mut answer = 0;
-        $(
-            answer += $expr * $value;
-        )*
-        answer
+    ( $starter: literal $start_var: block $( + $literal: literal $variable: block ) *, $( $value:literal ), * ) => {
+        {
+            let mut answer = $starter * $value;
+            $(
+                answer += $literal * $value;
+            )*
+            answer
+        }
     };
 
 }
 
 fn main(){
-    equation!(-5{} + 7{}, 6, 7, 8);
+    println!("{}", equation!(-5{} + 7{}, 6, 7));
 }

@@ -74,7 +74,7 @@ impl Agent {
         let epsilon: f64;
         if max_q_value != 0.0 {
             let sum: f64 = all_q_values.iter().sum();
-            epsilon = 1.0 - (max_q_value/sum)
+            epsilon = 1.0 - (max_q_value)
         } else {
             epsilon = 0.0
         }
