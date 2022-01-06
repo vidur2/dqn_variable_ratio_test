@@ -13,7 +13,7 @@ mod tests {
     }
 }
 
-use agent::{ Agent };
+use agent::Agent;
 use wasm_bindgen::prelude::*;
 use serde_json;
 
