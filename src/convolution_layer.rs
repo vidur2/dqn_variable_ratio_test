@@ -62,4 +62,24 @@ impl ConvLayer {
 
         feature_map.push(layer);
     }
+
+    fn average_pool(&self, input: Vec<Vec<f64>>) -> Vec<Vec<f64>> {
+        let mut pos_y_max = 1;
+        let mut pos_y_min = 0;
+        let mut pos_x_max = 1;
+        let mut pos_x_min = 0;
+        let mut pooled: Vec<Vec<f64>> = Vec::new();
+        while pos_y_max < input.len() {
+            let mut row: Vec<f64> = Vec::new();
+            while pos_x_max < input[0].len(){
+                row.push((input[pos_y_min][pos_x_min] + input[pos_y_min][pos_x_max] + input[pos_y_max][pos_x_min] + input[pos_y_max][pos_x_max])/4f64);
+                pos_x_max += 2;
+                pos_x_min += 2;
+            }
+            pooled.push(row);
+            pos_y_max += 2;
+            pos_y_min += 2;
+        }
+        pooled
+    }
 }

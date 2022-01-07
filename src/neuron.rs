@@ -1,8 +1,8 @@
 use rand::Rng;
 use std::f64::consts::E;
-use serde::Serialize;
+use serde::{ Serialize, Deserialize };
 
-#[derive(Clone, Serialize)]
+#[derive(Clone, Serialize, Deserialize)]
 #[repr(u8)]
 pub enum ActivationFunction {
     HyperTan,
@@ -12,7 +12,7 @@ pub enum ActivationFunction {
     Relu
 }
 
-#[derive(Clone, Serialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Neuron {
     pub output: f64,
     bias: f64,
@@ -26,11 +26,11 @@ impl Neuron {
         let mut rng = rand::thread_rng();
 
         if use_rand {
-            for _ in 0..input_number - 1 {
+            for _ in 0..input_number  {
                 weights.push(rng.gen_range(-10.0, 10.0) as f64);
             }
         } else {
-            for _ in 0..input_number - 1 {
+            for _ in 0..input_number {
                 weights.push(0.0);
             }
         }

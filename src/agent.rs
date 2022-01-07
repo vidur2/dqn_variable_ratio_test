@@ -1,9 +1,9 @@
 use crate::dqn::Network;
 use rand::Rng;
 use std::ops::Range;
-use serde::{Serialize};
+use serde::{ Serialize, Deserialize };
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Agent {
     target_network: Network,
     main_network: Network,
@@ -14,7 +14,7 @@ pub struct Agent {
     iteration_backprop: u64
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 struct BufferItem {
     current_state: Vec<f64>,
     next_state: Vec<f64>,
@@ -82,7 +82,7 @@ impl Agent {
         }
 
         if does_explore < epsilon && self.unexplored_actions.len() != 0{
-            action = rng.gen_range(0usize, all_q_values.len() - 1);
+            action = rng.gen_range(0usize, all_q_values.len());
             self.unexplored_actions.drain(action..action);
         } else {
             action = all_q_values.iter().position(|&r| r == max_q_value).expect("Invalid max_q_value") as usize

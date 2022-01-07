@@ -8,7 +8,7 @@ mod tests {
     use crate::StateStorage;
     #[test]
     fn get_state_storage(){
-        let state_storage = StateStorage::new(vec![1, 2, 2, 1], 5u64, 4u64, 5, 7);
+        let state_storage = StateStorage::new(vec![2, 2, 2, 1], 5u64, 4u64, 5, 7);
         println!("{}", state_storage.get_agent());
     }
 }
@@ -28,6 +28,13 @@ impl StateStorage {
     pub fn new(structure: Vec<u64>, amount_of_states: u64, iteration_backprop: u64, min_value: u8, max_value: u8) -> StateStorage {
         StateStorage {
             agent: Agent::initialize_agent(structure, amount_of_states, iteration_backprop, min_value..max_value)
+        }
+    }
+
+    pub fn from_string(json_input: String) -> StateStorage {
+        let agent: Agent = serde_json::from_str(json_input.as_str()).unwrap();
+        StateStorage {
+            agent: agent
         }
     }
 
