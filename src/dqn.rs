@@ -3,26 +3,6 @@ use std::collections::HashMap;
 use std::f64::consts::E;
 use serde::{ Serialize, Deserialize };
 
-// #[cfg(test)]
-// mod tests {
-//     use crate::dqn::Network;
-//     #[test]
-//     fn check_forward_propagate(){
-//         let mut network: Network = Network::generate_network(vec![2, 3, 1], 2);
-//         let q_value = network.generate_q_value(&vec![1.0, 5.0]);
-//         for value in q_value.0.iter() {
-//             println!("Output of softmax {}", value)
-//         }
-//         println!("Final output is {}", q_value.1)
-//     }
-
-    // #[test]
-    // fn check_back_propagate(){
-    //     let mut network = Network::generate_network(vec![2, 3, 1], 2);
-    //     network.backpropagate(&vec![2.0, 3.0], 5f64, 10f64, &vec![5.0, 2.0]);
-    // }
-// }
-
 #[derive(Serialize, Deserialize)]
 pub struct Network {
     pub neurons: HashMap<String, Vec<Neuron>>,

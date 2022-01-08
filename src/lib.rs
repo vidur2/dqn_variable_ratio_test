@@ -3,15 +3,15 @@ mod agent;
 mod dqn;
 mod convolution_layer;
 
-#[cfg(test)]
-mod tests {
-    use crate::StateStorage;
-    #[test]
-    fn get_state_storage(){
-        let state_storage = StateStorage::new(vec![2, 2, 2, 1], 5u64, 4u64, 5, 7);
-        println!("{}", state_storage.get_agent());
-    }
-}
+// #[cfg(test)]
+// mod tests {
+//     use crate::StateStorage;
+//     #[test]
+//     fn get_state_storage(){
+//         let state_storage = StateStorage::new(vec![2, 2, 2, 5], 5u64, 4u64, 5, 7);
+//         println!("{}", state_storage.get_agent())
+//     }
+// }
 
 use agent::Agent;
 use wasm_bindgen::prelude::*;

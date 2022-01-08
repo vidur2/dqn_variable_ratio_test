@@ -6,7 +6,7 @@ use serde::{ Serialize, Deserialize };
 #[derive(Serialize, Deserialize)]
 pub struct Agent {
     target_network: Network,
-    main_network: Network,
+    pub main_network: Network,
     replay_buffer: Vec<BufferItem>,
     unexplored_actions: Vec<u64>,
     variable_lr: u8,
@@ -80,7 +80,10 @@ impl Agent {
         } else {
             epsilon = 0.0
         }
-
+        for value in all_q_values.iter() {
+            print!("{}, ", value);
+        }
+        print!("\n");
         if does_explore < epsilon && self.unexplored_actions.len() != 0{
             action = rng.gen_range(0usize, all_q_values.len());
             self.unexplored_actions.drain(action..action);
