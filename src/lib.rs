@@ -25,9 +25,9 @@ pub struct StateStorage {
 
 #[wasm_bindgen]
 impl StateStorage {
-    pub fn new(structure: Vec<u64>, amount_of_states: u64, iteration_backprop: u64, min_value: u8, max_value: u8) -> StateStorage {
+    pub fn new(structure: Vec<u64>, amount_of_states: u64, iteration_backprop: u64, min_value: u8, max_value: u8, epsilon: f64) -> StateStorage {
         StateStorage {
-            agent: Agent::initialize_agent(structure, amount_of_states, iteration_backprop, min_value..max_value)
+            agent: Agent::initialize_agent(structure, amount_of_states, iteration_backprop, min_value..max_value, epsilon)
         }
     }
 

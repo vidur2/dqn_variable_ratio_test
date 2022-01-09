@@ -11,7 +11,8 @@ pub struct Agent {
     unexplored_actions: Vec<u64>,
     variable_lr: u8,
     variable_range: Range<u8>,
-    iteration_backprop: u64
+    iteration_backprop: u64,
+    epsilon: f64
 }
 
 #[derive(Serialize, Deserialize)]
@@ -23,7 +24,7 @@ struct BufferItem {
 }
 
 impl Agent {
-    pub fn initialize_agent(structure: Vec<u64>, amount_of_states: u64, iteration_backprop: u64, range: Range<u8>) -> Self {
+    pub fn initialize_agent(structure: Vec<u64>, amount_of_states: u64, iteration_backprop: u64, range: Range<u8>, epsilon: f64) -> Self {
         let mut rng = rand::thread_rng();
         let main_network = Network::generate_network(structure.clone(), amount_of_states);
         let target_network = main_network.clone();
@@ -39,7 +40,8 @@ impl Agent {
             unexplored_actions: unexplored_actions,
             variable_lr: rng.gen_range(range.clone().start, range.clone().end),
             variable_range: range,
-            iteration_backprop: iteration_backprop
+            iteration_backprop: iteration_backprop,
+            epsilon: epsilon
         }
     }
 
@@ -74,17 +76,7 @@ impl Agent {
         let max_q_value = self.main_network.generate_q_value(current_state).1; 
         let all_q_values = self.main_network.generate_q_value(current_state).0;
         self.main_network.iterations_passed += 1;
-        let epsilon: f64;
-        if max_q_value != 0.0 {
-            epsilon = 1.0 - (max_q_value)
-        } else {
-            epsilon = 0.0
-        }
-        for value in all_q_values.iter() {
-            print!("{}, ", value);
-        }
-        print!("\n");
-        if does_explore < epsilon && self.unexplored_actions.len() != 0{
+        if does_explore < self.epsilon && self.unexplored_actions.len() != 0{
             action = rng.gen_range(0usize, all_q_values.len());
             self.unexplored_actions.drain(action..action);
         } else {
